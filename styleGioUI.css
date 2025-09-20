@@ -859,3 +859,118 @@
         }
 
           /* checbox */
+
+
+
+          /* radiob */
+
+
+        .gio-radio-group-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .gio-radio-group-container h3 {
+            margin-bottom: 15px;
+            color: #333333;
+            text-align: center;
+        }
+
+        .radio-input {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-input * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        .gio-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0px 20px;
+            width: 220px;
+            cursor: pointer;
+            height: 50px;
+            position: relative;
+        }
+
+        .gio-radio-label::before {
+            position: absolute;
+            content: "";
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 45px;
+            z-index: -1;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        .gio-radio-label:hover::before {
+            transition: all 0.2s ease;
+            background-color: #e0e0e0;
+        }
+
+        .gio-radio-label:has(input:checked)::before {
+            background-color: #cccccc;
+            border-color: #888888;
+            height: 50px;
+        }
+        .gio-radio-label .gio-radio-text {
+            color: #333333;
+        }
+
+        .gio-radio-label input[type="radio"] {
+            background-color: #ffffff;
+            appearance: none;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #999999;
+        }
+        .gio-radio-label input[type="radio"]:checked {
+            background-color: #666666;
+            -webkit-animation: puls 0.7s forwards;
+            animation: pulse 0.7s forwards;
+        }
+
+        .gio-radio-label input[type="radio"]:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background-color: #ffffff;
+            transform: scale(0);
+        }
+
+        .gio-radio-label input[type="radio"]:checked::before {
+            transform: scale(1);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(150, 150, 150, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(150, 150, 150, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(150, 150, 150, 0);
+            }
+        }
+
+
+          /* radio */

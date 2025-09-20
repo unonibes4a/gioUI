@@ -1024,3 +1024,86 @@ class GioToggle {
         }
 
 /* checbox */
+
+
+/* radio */
+
+        class GioRadio {
+            constructor(parentHtml, id, group, text, isChecked = false, associatedEvents = {}) {
+                this.parentHtml = parentHtml;
+                this.id = id;
+                this.group = group;
+                this.text = text;
+                this.isChecked = isChecked;
+                this.associatedEvents = associatedEvents;
+
+                this.element = null;
+                this.radioInput = null;
+                this.textElement = null;
+
+                this.createRadio();
+                this.addEvents();
+            }
+
+            createRadio() {
+                const label = document.createElement('label');
+                label.className = 'gio-radio-label';
+
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.id = this.id;
+                input.name = this.group;
+                input.value = this.id;
+                if (this.isChecked) {
+                    input.checked = true;
+                }
+
+                const textParagraph = document.createElement('p');
+                textParagraph.className = 'gio-radio-text';
+                textParagraph.textContent = this.text;
+
+                label.appendChild(input);
+                label.appendChild(textParagraph);
+
+                this.parentHtml.appendChild(label);
+
+                this.element = label;
+                this.radioInput = input;
+                this.textElement = textParagraph;
+            }
+
+            addEvents() {
+                if (this.radioInput) {
+                    for (const eventType in this.associatedEvents) {
+                        if (Object.hasOwnProperty.call(this.associatedEvents, eventType)) {
+                            this.radioInput.addEventListener(eventType, this.associatedEvents[eventType]);
+                        }
+                    }
+                }
+            }
+
+            isChecked() {
+                return this.radioInput ? this.radioInput.checked : false;
+            }
+
+            setChecked(value) {
+                if (this.radioInput) {
+                    this.radioInput.checked = value;
+                }
+            }
+
+            setText(newText) {
+                if (this.textElement) {
+                    this.textElement.textContent = newText;
+                }
+            }
+
+            getRadioElement() {
+                return this.radioInput;
+            }
+
+            getLabelElement() {
+                return this.element;
+            }
+        }
+/* radio */
