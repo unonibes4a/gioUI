@@ -1,5 +1,5 @@
-  .giobotonLabel-hints {
-            --purple: #720c8f;
+.giobotonLabel-hints {
+            --purple: #333333;
             cursor: pointer;
             display: flex;
             justify-content: flex-start;
@@ -14,7 +14,7 @@
         }
         .giobotonLabel-hints .giobotonLabel-hint-dot {
             z-index: 3;
-            border: 1px solid #ffe4e4;
+            border: 1px solid #dedede;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -24,8 +24,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #333;
-            color: white;
+            background-color: #333333;
+            color: #ffffff;
         }
         .giobotonLabel-hints .giobotonLabel-hint-radius {
             background-color: rgba(255, 255, 255, 0.1);
@@ -51,7 +51,7 @@
             padding: 35px 0;
             opacity: 0;
             transition: opacity 0.7s ease, visibility 0.7s ease;
-            color: #fff;
+            color: #ffffff;
             visibility: hidden;
             pointer-events: none;
         }
@@ -62,7 +62,7 @@
             opacity: 1;
             -webkit-transition: opacity 0.7s ease, visibility 0.7s ease;
             transition: opacity 0.7s ease, visibility 0.7s ease;
-            color: #333;
+            color: #333333;
             visibility: visible;
             pointer-events: none;
         }
@@ -71,7 +71,7 @@
             bottom: 29px;
             left: 0;
             content: "";
-            background-color: #333;
+            background-color: #333333;
             height: 1px;
             position: absolute;
             transition: width 0.4s;
@@ -89,7 +89,7 @@
             left: 0;
             width: 80px;
             content: "";
-            background-color: #333;
+            background-color: #333333;
             height: 1px;
             position: absolute;
             opacity: 1;
@@ -118,36 +118,23 @@
             justify-content: center;
             padding:8px 4px 4px 8px;
             font-size: 13px;
-            color: #8f8f8f;
+            color: #999999;
             height: 45px;
             position: relative;
             top: 8px;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-          .giofecha-theme-primary-color { color: #000000; }
+          .giofecha-theme-primary-color { color: #111111; }
     .giofecha-theme-primary-bg { background-color: #ffffff; }
-    .giofecha-theme-border-color { border-color: #8f8f8f; }
+    .giofecha-theme-border-color { border-color: #999999; }
     .giofecha-theme-text-color { color: #111111; }
-    .giofecha-theme-background-light { background-color: #f0f2f5; }
-    .giofecha-theme-background-dark { background-color: #4e4e4e; }
-    .giofecha-theme-text-dark { color: #e2e8f0; }
-    .giofecha-theme-day-hover-bg { background-color: #383838; }
-    .giofecha-theme-selected-day-bg { background-color: #141414; }
+    .giofecha-theme-background-light { background-color: #dedede; }
+    .giofecha-theme-background-dark { background-color: #424242; }
+    .giofecha-theme-text-dark { color: #dedede; }
+    .giofecha-theme-day-hover-bg { background-color: #424242; }
+    .giofecha-theme-selected-day-bg { background-color: #111111; }
     .giofecha-theme-selected-day-text { color: #ffffff; }
-    .giofecha-theme-inactive-day-color { color: #e0e0e0; }
-
- 
+    .giofecha-theme-inactive-day-color { color: #dedede; }
 
     .giofecha-datepicker-container {
         display: flex;
@@ -170,34 +157,30 @@
         width: 100%;
         max-width: 320px;
         transition: 1.3s;
-
         height: 100px;
-        background-color: #00000005;
+        background-color: #dedede;
         display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
 	align-content: center;
-
     margin: 7px 7px 7px 7px;
-
     }
 
     .giofecha-datepicker-input-group {
         display: flex;
         align-items: center;
-        background-color: #ffffff4f;
+        background-color: #dedede;
         border-width: 2px;
         border-style: solid;
         border-radius: 8px;
         transition: all 0.2s ease;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    
     }
 
     .giofecha-datepicker-input-group:focus-within {
-        border-color: #000000;
+        border-color: #111111;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
@@ -205,7 +188,7 @@
         padding: 8px 10px 8px 12px;
         display: flex;
         align-items: center;
-        color: #6b7280;
+        color: #999999;
     }
 
     .giofecha-calendar-icon-prefix svg {
@@ -220,13 +203,11 @@
         font-size: 1em;
         border: none;
         outline: none;
-          
         width: 70%;
         cursor: pointer;
         border-radius: 0 8px 8px 0;
         font-size: 13px;
-
-        background-color: #2e2e2e3d;
+        background-color: #424242;
     }
 
     .giofecha-datepicker-calendar-popup {
@@ -279,8 +260,8 @@
     }
 
     .giofecha-datepicker-header .giofecha-nav-button:hover {
-        background-color: #a0a0a0;
-        color: #2b2b2b;
+        background-color: #999999;
+        color: #333333;
     }
 
     .giofecha-datepicker-weekdays {
@@ -331,15 +312,14 @@
     }
 
     .giofecha-datepicker-days span.giofecha-today {
-        border: 1px solid #d4d4d4;
+        border: 1px solid #999999;
     }
 
     .giofecha-gioclassposlabeldatpiker {
         position: absolute;
         top: -23px;
         right: 0%;
-   
-        color: #707070;
+        color: #999999;
         font-size: 14px;
         transition: 1.3s;
         width: 99%;
@@ -351,33 +331,31 @@
         align-content: center;
         padding-left: 12px;
         right: 6%;
-        color: #8a8a8a;
         font-size: 14px;
         transition: 1.3s;
         width: 90%;
         display: block;
         padding-left: 5px;
-        background-color:rgb(255 255 255 / 66%);
+        background-color: #dedede;
         border-radius: 7px;
     }
 
     .giofecha-datepicker-wrapper:hover .giofecha-gioclassposlabeldatpiker {
-       color: #3a3a3a;
+       color: #333333;
     }
  
     .giofecha-gioclassposlabeldatpikerError{
         position: absolute;
         top:50px;
         right: 6%;
-        color: #e4e4e4;
+        color: #dedede;
         font-size: 14px;
         transition: 1.3s;
         width: 90%;
         display: block;
         padding-left: 5px;
-        background-color: rgba(0, 0, 0, 0.658);
+        background-color: #333333;
          border-radius: 7px;
-      
     }
 
     .giofecha-datepicker-wrapper:hover{
@@ -393,7 +371,6 @@
         text-align: center;
     }
 
-    
     .giofecha-datepicker-year-wheel-container {
         position: absolute;
         top: 0;
@@ -416,7 +393,7 @@
     }
 
     .giofecha-datepicker-year-wheel {
-        background-color: rgba(0.5,0.5,0.5,0.3);
+        background-color: #424242;
         border-radius: 12px;
         padding: 20px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
@@ -440,19 +417,18 @@
         cursor: pointer;
         font-size: 1.1em;
         transition: background-color 0.2s ease, color 0.2s ease;
-          cursor: pointer;
+        cursor: pointer;
     }
 
     .giofecha-datepicker-year-wheel li:hover {
-        background-color: #555353;
+        background-color: #999999;
     }
 
     .giofecha-datepicker-year-wheel li.giofecha-selected {
-        background-color: #00000067;
+        background-color: #111111;
         color: #ffffff;
         font-weight: bold;
         border-radius: 4px;
-       
     }
 
     @media (max-width: 768px) {
@@ -470,11 +446,8 @@
         cursor: pointer;
     }
     .giofecha-current-month-year:hover{
-      
-        color: rgb(243, 239, 215);
-    }  
-
-
+        color: #dedede;
+    }
 
      .giosliderfloat-container {
             position: relative;
@@ -483,8 +456,8 @@
             width: 100%;
             max-width: 300px;
             height: 80px;
-            background-color: #00000044;
-            border: 1px solid #e0e0e0;
+            background-color: #424242;
+            border: 1px solid #dedede;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             display: flex;
@@ -501,21 +474,21 @@
             top: 7%;
             left: 5%;
             font-size: 1em;
-            color: #333;
+            color: #333333;
             font-weight: 600;
             font-size: 14px;
         }
 
         .giosliderfloat-label span {
             font-weight: normal;
-            color: #555;
+            color: #999999;
         }
 
         .giosliderfloat-range-input {
             -webkit-appearance: none;
             width: 80%;
             height: 8px;
-            background: #d3d3d3;
+            background: #999999;
             outline: none;
             opacity: 0.7;
             -webkit-transition: .2s;
@@ -533,7 +506,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #666;
+            background: #111111;
             cursor: grab;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
@@ -542,7 +515,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #666;
+            background: #111111;
             cursor: grab;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
@@ -550,11 +523,11 @@
         .giosliderfloat-number-input {
             width: 70px;
             padding: 5px 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #999999;
             border-radius: 4px;
             font-size: 0.9em;
             text-align: center;
-            color: #333;
+            color: #333333;
             -moz-appearance: textfield;
         }
 
@@ -590,12 +563,6 @@
             font-size: 12px;
         }
 
-
-
-
-         /* toggle */
-
-
         .giotoggle-checkbox {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -604,7 +571,7 @@
         }
 
         .giotoggle-switch {
-            background-color: #333;
+            background-color: #333333;
             width: 78px;
             height: 32px;
             border-radius: 16px;
@@ -616,7 +583,7 @@
         .giotoggle-switch::before {
             content: "";
             font-weight: 900;
-            background-color: #9b9b9b;
+            background-color: #999999;
             width: 24px;
             height: 24px;
             position: absolute;
@@ -626,20 +593,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #ddd;
+            color: #dedede;
             transition: 0.3s;
-            border: 3px solid #535353;
+            border: 3px solid #424242;
         }
 
         .giotoggle-checkbox:checked+.giotoggle-switch {
-            background-color: #5e5e5e;
+            background-color: #424242;
         }
 
         .giotoggle-checkbox:checked+.giotoggle-switch::before {
             content: "";
             left: 50px;
-          
-              background-color: #ffffff;
+            background-color: #ffffff;
         }
 
         .giotoggle-divcontainertooggle {
@@ -647,8 +613,6 @@
             top: 0%;
             left: 0%;
             width: 150px;
-
-
             background-color: #111111;
             border-radius: 12px;
             display: flex;
@@ -658,14 +622,12 @@
             align-items: center;
             align-content: center;
             margin: 7px 7px 7px 7px;
-
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
             justify-content: flex-end;
             align-items: center;
             align-content: center;
-
         }
 
         .giotoggle-pospantoggle {
@@ -673,26 +635,21 @@
             left: 3px;
             max-width: 100px;
             font-size: 12px;
-            color: #fdfdfd;
+            color: #ffffff;
             display: block;
             background-color: #42424200;
             text-align: right;
             border-radius: 12px;
-
-            /* **Nuevas propiedades para el recorte** */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            cursor: pointer; /* Indicar que es clicable */
-
-
+            cursor: pointer;
             display: flex;
             flex-direction: row-reverse;
             flex-wrap: wrap;
             justify-content: flex-end;
             align-items: center;
             align-content: center;
-
         }
 
         .giotoggle-pospantoggle2 {
@@ -700,49 +657,37 @@
             top: -100%;
             left: -0%;
             width: 110px;
-
             font-size: 12px;
-            color: #383838;
+            color: #424242;
             display: block;
-
-
             background-color: #00000000;
             text-align: right;
-
-
         }
 
-        /* **Nuevos estilos para el pop-up** */
         .giotoggle-popup {
             position: absolute;
             top: -100px;
             left: 0px;
- 
-            background-color: #333;
-            color: #fff;
+            background-color: #333333;
+            color: #ffffff;
             padding: 8px 12px;
             border-radius: 8px;
             z-index: 1000;
-            display: none; /* Oculto por defecto */
-            max-width: 200px; /* Ancho máximo del pop-up */
+            display: none;
+            max-width: 200px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             font-size: 12px;
             text-align: left;
-            pointer-events: none; /* Permite clics a través del pop-up si no queremos interacción directa */
+            pointer-events: none;
         }
 
-          /* toggle */
-        
-
-          /* checbox */
-
-            .gioClBodyCheckbox {
+        .gioClBodyCheckbox {
             font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f2f5;
+            background-color: #dedede;
             margin: 0;
         }
 
@@ -750,7 +695,7 @@
             display: flex;
             gap: 20px;
             padding: 20px;
-            background: #3f3f3f3b;
+            background: #424242;
             border-radius: 12px;
             align-items: center;
             min-width: 100px;
@@ -759,9 +704,9 @@
 
         .gioClLabelCheckbox {
             --gio-size: 20.72px;
-            --gio-color: #3b82f6;
-            --gio-bg: #dbeafe;
-            --gio-border: #93c5fd;
+            --gio-color: #333333;
+            --gio-bg: #dedede;
+            --gio-border: #999999;
             position: relative;
             display: inline-flex;
             align-items: center;
@@ -788,7 +733,7 @@
             inset: 0;
             border-radius: 8px;
             border: 2px solid var(--gio-border);
-            background: rgba(0.25, 0.25, 0.25, 0.3);
+            background: #424242;
             transition: all 0.2s ease;
         }
 
@@ -798,7 +743,7 @@
             margin: auto;
             width: 80%;
             height: 80%;
-            color: white;
+            color: #ffffff;
             transform: scale(0);
             transition: all 0.2s ease;
         }
@@ -835,8 +780,8 @@
         }
 
         .gioClLabelCheckbox.gioClRedCheckbox {
-            --gio-color: #636363;
-            --gio-bg: #d1d1d1;
+            --gio-color: #111111;
+            --gio-bg: #dedede;
             --gio-border: #ffffff;
         }
 
@@ -855,15 +800,8 @@
 
         .gioClTextCheckbox {
             font-size: 1.1em;
-            color: #555555;
+            color: #999999;
         }
-
-          /* checbox */
-
-
-
-          /* radiob */
-
 
         .gio-radio-group-container {
             margin-bottom: 30px;
@@ -917,12 +855,12 @@
         }
         .gio-radio-label:hover::before {
             transition: all 0.2s ease;
-            background-color: #e0e0e0;
+            background-color: #dedede;
         }
 
         .gio-radio-label:has(input:checked)::before {
-            background-color: #cccccc;
-            border-color: #888888;
+            background-color: #999999;
+            border-color: #424242;
             height: 50px;
         }
         .gio-radio-label .gio-radio-text {
@@ -941,7 +879,7 @@
             border: 1px solid #999999;
         }
         .gio-radio-label input[type="radio"]:checked {
-            background-color: #666666;
+            background-color: #111111;
             -webkit-animation: puls 0.7s forwards;
             animation: pulse 0.7s forwards;
         }
@@ -962,15 +900,358 @@
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(150, 150, 150, 0.4);
+                box-shadow: 0 0 0 0 rgba(153, 153, 153, 0.4);
             }
             70% {
-                box-shadow: 0 0 0 8px rgba(150, 150, 150, 0);
+                box-shadow: 0 0 0 8px rgba(153, 153, 153, 0);
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(150, 150, 150, 0);
+                box-shadow: 0 0 0 0 rgba(153, 153, 153, 0);
             }
         }
 
+        .gio-input-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 7px;
+        }
 
-          /* radio */
+        .gio-input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #999999;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .gio-input-field:focus {
+            border-color: #333333;
+            box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+        }
+
+        .gio-input-field:focus + .gio-input-label,
+        .gio-input-field:not(:placeholder-shown) + .gio-input-label {
+            top: -8px;
+            left: 12px;
+            font-size: 12px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 4px;
+        }
+
+        .gio-input-label {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            color: #999999;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        .gio-input-error {
+            color: #424242;
+            font-size: 14px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .gio-input-field.error {
+            border-color: #424242;
+        }
+
+        .gio-textarea-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 7px;
+        }
+
+        .gio-textarea-field {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px 16px;
+            border: 2px solid #999999;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .gio-textarea-field:focus {
+            border-color: #333333;
+            box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+        }
+
+        .gio-textarea-field:focus + .gio-textarea-label,
+        .gio-textarea-field:not(:placeholder-shown) + .gio-textarea-label {
+            top: -8px;
+            left: 12px;
+            font-size: 12px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 4px;
+        }
+
+        .gio-textarea-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            color: #999999;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        .gio-select-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 7px;
+        }
+
+        .gio-select-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #999999;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            box-sizing: border-box;
+            appearance: none;
+        }
+
+        .gio-select-field:focus {
+            border-color: #333333;
+            box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+        }
+
+        .gio-select-arrow {
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #999999;
+            transition: transform 0.3s ease;
+        }
+
+        .gio-select-field:focus + .gio-select-arrow {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .gio-select-label {
+            position: absolute;
+            top: -8px;
+            left: 12px;
+            font-size: 12px;
+            background-color: #ffffff;
+            color: #333333;
+            padding: 0 4px;
+        }
+
+        .gio-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            box-sizing: border-box;
+            margin: 4px;
+        }
+
+        .gio-button-primary {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        .gio-button-primary:hover {
+            background-color: #111111;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(51, 51, 51, 0.3);
+        }
+
+        .gio-button-secondary {
+            background-color: #dedede;
+            color: #333333;
+            border: 2px solid #999999;
+        }
+
+        .gio-button-secondary:hover {
+            background-color: #999999;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(153, 153, 153, 0.3);
+        }
+
+        .gio-button-outline {
+            background-color: transparent;
+            color: #333333;
+            border: 2px solid #333333;
+        }
+
+        .gio-button-outline:hover {
+            background-color: #333333;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(51, 51, 51, 0.3);
+        }
+
+        .gio-button:disabled {
+            background-color: #dedede;
+            color: #999999;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .gio-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin: 16px;
+            border: 1px solid #dedede;
+            transition: all 0.3s ease;
+        }
+
+        .gio-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .gio-card-header {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #dedede;
+        }
+
+        .gio-card-title {
+            color: #333333;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .gio-card-subtitle {
+            color: #999999;
+            font-size: 0.9rem;
+            margin: 4px 0 0 0;
+        }
+
+        .gio-card-content {
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .gio-card-footer {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #dedede;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .gio-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(17, 17, 17, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .gio-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gio-modal {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .gio-modal-overlay.active .gio-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .gio-modal-header {
+            padding: 24px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gio-modal-title {
+            color: #333333;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .gio-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999999;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .gio-modal-close:hover {
+            background-color: #dedede;
+            color: #333333;
+        }
+
+        .gio-modal-content {
+            padding: 24px;
+            color: #333333;
+        }
+
+        .gio-modal-footer {
+            padding: 0 24px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
