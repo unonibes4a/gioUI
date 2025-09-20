@@ -1107,3 +1107,700 @@ class GioToggle {
             }
         }
 /* radio */
+
+/* tablagio */
+
+
+    class GioTable {
+  constructor(containerId, options = {}) {
+    this.container = (typeof containerId == "string") ? document.getElementById(containerId) : containerId;
+    this.datos = options.data || [
+      { id: 1, nombre: 'Juan Pérez', email: 'juan@email.com', edad: 28, departamento: 'Desarrollo', salario: 65000 },
+      { id: 2, nombre: 'María García', email: 'maria@email.com', edad: 34, departamento: 'Marketing', salario: 58000 },
+      { id: 3, nombre: 'Carlos López', email: 'carlos@email.com', edad: 29, departamento: 'Desarrollo', salario: 72000 },
+      { id: 4, nombre: 'Ana Martínez', email: 'ana@email.com', edad: 31, departamento: 'Recursos Humanos', salario: 55000 },
+      { id: 5, nombre: 'Pedro Rodríguez', email: 'pedro@email.com', edad: 26, departamento: 'Ventas', salario: 48000 },
+      { id: 6, nombre: 'Laura Fernández', email: 'laura@email.com', edad: 33, departamento: 'Marketing', salario: 62000 },
+      { id: 7, nombre: 'Diego Morales', email: 'diego@email.com', edad: 27, departamento: 'Desarrollo', salario: 68000 },
+      { id: 8, nombre: 'Sofia Ruiz', email: 'sofia@email.com', edad: 30, departamento: 'Diseño', salario: 54000 },
+      { id: 9, nombre: 'Miguel Torres', email: 'miguel@email.com', edad: 35, departamento: 'Gerencia', salario: 85000 },
+      { id: 10, nombre: 'Carmen Jiménez', email: 'carmen@email.com', edad: 28, departamento: 'Contabilidad', salario: 52000 }
+    ];
+    
+    this.searchTerm = '';
+    this.filteredData = [];
+    this.currentPage = 1;
+    this.rowsPerPage = 10;
+    this.sortColumn = null;
+    this.sortDirection = 'asc';
+    this.showModal = false;
+    this.editingItem = null;
+    this.formData = {};
+    this.availableColumns = [];
+    this.visibleColumns = [];
+    
+    this.init();
+  }
+
+  init() {
+    this.initializeColumns();
+    this.filterData();
+    this.render();
+    this.bindEvents();
+  }
+
+  initializeColumns() {
+    if (this.datos.length > 0) {
+      this.availableColumns = Object.keys(this.datos[0]).filter(key => key !== 'id');
+      this.visibleColumns = [...this.availableColumns];
+    }
+  }
+
+  get totalPages() {
+    return Math.ceil(this.filteredData.length / this.rowsPerPage);
+  }
+
+  get paginatedData() {
+    const start = (this.currentPage - 1) * this.rowsPerPage;
+    const end = start + this.rowsPerPage;
+    return this.filteredData.slice(start, end);
+  }
+
+  normalizeString(str) {
+    return String(str)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  filterData() {
+    if (!this.searchTerm) {
+      this.filteredData = [...this.datos];
+    } else {
+      const normalizedTerm = this.normalizeString(this.searchTerm);
+      this.filteredData = this.datos.filter(item => {
+        return Object.values(item).some(value => 
+          this.normalizeString(value).includes(normalizedTerm)
+        );
+      });
+    }
+    this.currentPage = 1;
+    this.applySorting();
+  }
+
+  sortBy(column) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.applySorting();
+  }
+
+  applySorting() {
+    if (this.sortColumn) {
+      this.filteredData.sort((a, b) => {
+        const aVal = a[this.sortColumn];
+        const bVal = b[this.sortColumn];
+        
+        let comparison = 0;
+        if (aVal > bVal) comparison = 1;
+        if (aVal < bVal) comparison = -1;
+        
+        return this.sortDirection === 'desc' ? -comparison : comparison;
+      });
+    }
+  }
+
+  getSortClass(column) {
+    const classes = ['giotable-th-sortable'];
+    if (this.sortColumn === column) {
+      classes.push(this.sortDirection === 'asc' ? 'giotable-th-sort-asc' : 'giotable-th-sort-desc');
+    }
+    return classes.join(' ');
+  }
+
+  goToPage(page) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.renderTable();
+      this.renderPagination();
+    }
+  }
+
+  openModal(item) {
+    this.editingItem = item;
+    if (item) {
+      this.formData = { ...item };
+    } else {
+      this.formData = {};
+      this.availableColumns.forEach(col => {
+        this.formData[col] = '';
+      });
+    }
+    this.showModal = true;
+    this.renderModal();
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.editingItem = null;
+    this.formData = {};
+    this.renderModal();
+  }
+
+  saveItem() {
+    if (this.editingItem) {
+      const index = this.datos.findIndex(item => item.id === this.editingItem.id);
+      if (index !== -1) {
+        this.datos.splice(index, 1, { ...this.formData, id: this.editingItem.id });
+      }
+    } else {
+      const newId = Math.max(...this.datos.map(item => item.id || 0)) + 1;
+      this.datos.push({ ...this.formData, id: newId });
+    }
+    this.filterData();
+    this.renderTable();
+    this.renderPagination();
+    this.closeModal();
+  }
+
+  confirmDelete(item) {
+    if (confirm('¿Está seguro de que desea eliminar este registro?')) {
+      const index = this.datos.findIndex(i => i.id === item.id);
+      if (index !== -1) {
+        this.datos.splice(index, 1);
+        this.filterData();
+        this.renderTable();
+        this.renderPagination();
+      }
+    }
+  }
+
+  showTooltip(event, content) {
+    const tooltip = this.container.querySelector('.giotable-tooltip');
+    tooltip.textContent = content;
+    
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      tooltip.style.left = '50%';
+      tooltip.style.top = '50%';
+      tooltip.style.transform = 'translate(-50%, -50%)';
+      tooltip.style.position = 'fixed';
+      tooltip.style.zIndex = '2000';
+      tooltip.style.maxWidth = '80vw';
+      tooltip.style.whiteSpace = 'normal';
+      tooltip.style.wordBreak = 'break-word';
+    } else {
+      tooltip.style.left = event.pageX + 10 + 'px';
+      tooltip.style.top = event.pageY - 10 + 'px';
+      tooltip.style.transform = 'none';
+      tooltip.style.position = 'absolute';
+      tooltip.style.zIndex = '1000';
+      tooltip.style.maxWidth = '300px';
+      tooltip.style.whiteSpace = 'nowrap';
+      tooltip.style.wordBreak = 'normal';
+    }
+    
+    tooltip.classList.add('giotable-tooltip-show');
+    
+    if (isMobile) {
+      setTimeout(() => {
+        this.hideTooltip();
+      }, 3000);
+    }
+  }
+
+  hideTooltip() {
+    const tooltip = this.container.querySelector('.giotable-tooltip');
+    tooltip.classList.remove('giotable-tooltip-show');
+  }
+
+  handleCellInteraction(event, content) {
+    this.showTooltip(event, content);
+  }
+
+  formatColumnName(column) {
+    return column.charAt(0).toUpperCase() + column.slice(1).replace(/([A-Z])/g, ' $1');
+  }
+
+  async loadLibrary(url, globalVar) {
+    return new Promise((resolve, reject) => {
+      if (window[globalVar]) {
+        resolve(window[globalVar]);
+        return;
+      }
+      
+      const script = document.createElement('script');
+      script.src = url;
+      script.onload = () => {
+        if (window[globalVar]) {
+          resolve(window[globalVar]);
+        } else {
+          reject(new Error(`No se pudo cargar ${globalVar}`));
+        }
+      };
+      script.onerror = () => reject(new Error(`Error cargando ${url}`));
+      document.head.appendChild(script);
+    });
+  }
+
+  async exportToPDF() {
+    try {
+      if (typeof window.jspdf === 'undefined') {
+        await this.loadLibrary('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf');
+      }
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text('Reporte de Datos - GioTable', 20, 20);
+      
+      doc.setFontSize(10);
+      doc.text(`Generado: ${new Date().toLocaleString()}`, 20, 30);
+      
+      let yPosition = 45;
+      const headers = this.visibleColumns.map(col => this.formatColumnName(col));
+      
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      headers.forEach((header, index) => {
+        doc.text(header, 20 + (index * 35), yPosition);
+      });
+      
+      doc.line(20, yPosition + 2, 20 + (headers.length * 35), yPosition + 2);
+      
+      yPosition += 10;
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(10);
+      
+      for (const item of this.filteredData) {
+        this.visibleColumns.forEach((col, index) => {
+          const text = String(item[col] || '');
+          const displayText = text.length > 20 ? text.substring(0, 17) + '...' : text;
+          doc.text(displayText, 20 + (index * 35), yPosition);
+        });
+        
+        yPosition += 8;
+        
+        if (yPosition > 275) {
+          doc.addPage();
+          yPosition = 20;
+        }
+      }
+      
+      doc.setFontSize(8);
+      doc.text(`Total de registros: ${this.filteredData.length}`, 20, yPosition + 10);
+      
+      doc.save(`giotable-datos-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+    } catch (error) {
+      console.error('Error al generar PDF:', error);
+      alert('No se pudo generar el PDF. Se descargará como archivo de texto.');
+      await this.exportToText();
+    }
+  }
+
+  async exportToExcel() {
+    try {
+      if (typeof XLSX === 'undefined') {
+        await this.loadLibrary('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js', 'XLSX');
+      }
+      
+      const excelData = this.filteredData.map(item => {
+        const row = {};
+        this.visibleColumns.forEach(col => {
+          row[this.formatColumnName(col)] = item[col];
+        });
+        return row;
+      });
+      
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      const wb = XLSX.utils.book_new();
+      
+      const colWidths = this.visibleColumns.map(() => ({ width: 20 }));
+      ws['!cols'] = colWidths;
+      
+      XLSX.utils.book_append_sheet(wb, ws, "Datos-GioTable");
+      
+      const fileName = `giotable-datos-${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      
+    } catch (error) {
+      console.error('Error al generar Excel:', error);
+      alert('No se pudo generar Excel. Se descargará como CSV.');
+      await this.exportToCSV();
+    }
+  }
+
+  async exportToCSV() {
+    try {
+      const headers = this.visibleColumns.map(col => this.formatColumnName(col)).join(',');
+      
+      const rows = this.filteredData.map(item => 
+        this.visibleColumns.map(col => {
+          const value = String(item[col] || '');
+          if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+            return `"${value.replace(/"/g, '""')}"`;
+          }
+          return value;
+        }).join(',')
+      ).join('\n');
+      
+      const csvContent = '\uFEFF' + headers + '\n' + rows;
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `giotable-datos-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error('Error al generar CSV:', error);
+      alert('Error al generar CSV.');
+    }
+  }
+
+  async exportToText() {
+    try {
+      const content = this.generateTextReport();
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `giotable-reporte-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error al generar archivo de texto:', error);
+      alert('Error al generar archivo de texto.');
+    }
+  }
+
+  generateTextReport() {
+    const separator = '='.repeat(80);
+    const lineSeparator = '-'.repeat(80);
+    
+    let report = `REPORTE GIOTABLE\n${separator}\n`;
+    report += `Generado: ${new Date().toLocaleString()}\n`;
+    report += `Total de registros: ${this.filteredData.length}\n\n`;
+    
+    const headers = this.visibleColumns.map(col => this.formatColumnName(col));
+    report += headers.join('\t\t') + '\n';
+    report += lineSeparator + '\n';
+    
+    this.filteredData.forEach(item => {
+      const row = this.visibleColumns.map(col => String(item[col] || '')).join('\t\t');
+      report += row + '\n';
+    });
+    
+    report += `\n${separator}\n`;
+    report += `Fin del reporte - ${this.filteredData.length} registros procesados`;
+    
+    return report;
+  }
+
+  printTable() {
+    window.print();
+  }
+
+  startVideoCall(item) {
+    alert(`Iniciando video llamada con ${item.nombre}...`);
+  }
+
+  render() {
+    this.container.innerHTML = `
+      <div class="giotable-container">
+        <div class="giotable-header">
+          <h1 class="giotable-title">Gestión de Datos</h1>
+          <div class="giotable-controls">
+            <div class="giotable-search-box">
+              <input type="text" 
+                     class="giotable-search-input" 
+                     placeholder="Buscar..." 
+                     value="${this.searchTerm}">
+            </div>
+            <button class="giotable-btn giotable-btn-primary" id="add-btn">
+              Agregar
+            </button>
+          </div>
+        </div>
+
+        <div class="giotable-column-toggle">
+          <span class="giotable-column-toggle-span" style="font-weight: 600; margin-right: 12px;">Columnas visibles:</span>
+          ${this.availableColumns.map(column => `
+            <label class="giotable-column-toggle-label">
+              <input type="checkbox" class="column-checkbox" value="${column}" ${this.visibleColumns.includes(column) ? 'checked' : ''}>
+              ${this.formatColumnName(column)}
+            </label>
+          `).join('')}
+        </div>
+
+        <div class="giotable-pagination-controls">
+          <div class="giotable-rows-per-page">
+            <span class="giotable-column-toggle-span">Mostrar:</span>
+            <select class="giotable-rows-select" id="rows-per-page">
+              <option value="5" ${this.rowsPerPage === 5 ? 'selected' : ''}>5</option>
+              <option value="10" ${this.rowsPerPage === 10 ? 'selected' : ''}>10</option>
+              <option value="25" ${this.rowsPerPage === 25 ? 'selected' : ''}>25</option>
+              <option value="50" ${this.rowsPerPage === 50 ? 'selected' : ''}>50</option>
+              <option value="100" ${this.rowsPerPage === 100 ? 'selected' : ''}>100</option>
+            </select>
+            <span class="giotable-column-toggle-span">filas</span>
+          </div>
+          
+          <div class="giotable-export-buttons">
+            <button class="giotable-btn giotable-btn-secondary giotable-btn-small" id="export-pdf">PDF</button>
+            <button class="giotable-btn giotable-btn-secondary giotable-btn-small" id="export-excel">Excel</button>
+            <button class="giotable-btn giotable-btn-secondary giotable-btn-small" id="export-csv">CSV</button>
+            <button class="giotable-btn giotable-btn-secondary giotable-btn-small" id="print-table">Imprimir</button>
+          </div>
+        </div>
+
+        <div class="giotable-wrapper">
+          <table class="giotable-table" id="data-table">
+          </table>
+        </div>
+
+        <div class="giotable-pagination" id="pagination">
+        </div>
+      </div>
+
+      <div class="giotable-modal ${this.showModal ? 'giotable-modal-show' : ''}" id="modal">
+        <div class="giotable-modal-content">
+          <div class="giotable-modal-header">
+            <h2 class="giotable-modal-title">${this.editingItem ? 'Editar Registro' : 'Nuevo Registro'}</h2>
+            <button class="giotable-close-btn" id="close-modal">&times;</button>
+          </div>
+          
+          <div id="form-fields">
+            ${this.availableColumns.map(column => `
+              <div class="giotable-form-group">
+                <label class="giotable-form-label">${this.formatColumnName(column)}:</label>
+                <input type="text" 
+                       class="giotable-form-input form-field" 
+                       data-column="${column}"
+                       value="${this.formData[column] || ''}"
+                       placeholder="Ingrese ${this.formatColumnName(column)}">
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="giotable-modal-actions">
+            <button class="giotable-btn giotable-btn-secondary" id="cancel-btn">Cancelar</button>
+            <button class="giotable-btn giotable-btn-primary" id="save-btn">
+              ${this.editingItem ? 'Actualizar' : 'Crear'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="giotable-tooltip"></div>
+    `;
+
+    this.renderTable();
+    this.renderPagination();
+  }
+
+  renderTable() {
+    const table = this.container.querySelector('#data-table');
+    table.innerHTML = `
+      <thead>
+        <tr class="giotable-tr">
+          ${this.visibleColumns.map(column => `
+            <th class="giotable-th ${this.getSortClass(column)}" data-column="${column}">
+              ${this.formatColumnName(column)}
+            </th>
+          `).join('')}
+          <th class="giotable-th">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${this.paginatedData.map(item => `
+          <tr class="giotable-tr">
+            ${this.visibleColumns.map(column => `
+              <td class="giotable-td cell-content" data-content="${item[column]}">
+                ${item[column]}
+              </td>
+            `).join('')}
+            <td class="giotable-td">
+              <div class="giotable-action-buttons">
+                <button class="giotable-btn giotable-btn-success giotable-btn-small edit-btn" data-id="${item.id}">
+                  Editar
+                </button>
+                <button class="giotable-btn giotable-btn-danger giotable-btn-small delete-btn" data-id="${item.id}">
+                  Eliminar
+                </button>
+                <button class="giotable-btn giotable-btn-video giotable-btn-small video-btn" data-id="${item.id}">
+                  Video Llamada
+                </button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    `;
+  }
+
+  renderPagination() {
+    const pagination = this.container.querySelector('#pagination');
+    pagination.innerHTML = `
+      <button class="giotable-btn giotable-btn-secondary" id="first-page" ${this.currentPage === 1 ? 'disabled' : ''}>
+        Primera
+      </button>
+      <button class="giotable-btn giotable-btn-secondary" id="prev-page" ${this.currentPage === 1 ? 'disabled' : ''}>
+        Anterior
+      </button>
+      <span class="giotable-pagination-info">
+        Página ${this.currentPage} de ${this.totalPages} (${this.filteredData.length} registros)
+      </span>
+      <button class="giotable-btn giotable-btn-secondary" id="next-page" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
+        Siguiente
+      </button>
+      <button class="giotable-btn giotable-btn-secondary" id="last-page" ${this.currentPage === this.totalPages ? 'disabled' : ''}>
+        Última
+      </button>
+    `;
+  }
+
+  renderModal() {
+    const modal = this.container.querySelector('#modal');
+    modal.className = `giotable-modal ${this.showModal ? 'giotable-modal-show' : ''}`;
+    
+    const title = modal.querySelector('.giotable-modal-title');
+    title.textContent = this.editingItem ? 'Editar Registro' : 'Nuevo Registro';
+    
+    const formFields = modal.querySelector('#form-fields');
+    formFields.innerHTML = this.availableColumns.map(column => `
+      <div class="giotable-form-group">
+        <label class="giotable-form-label">${this.formatColumnName(column)}:</label>
+        <input type="text" 
+               class="giotable-form-input form-field" 
+               data-column="${column}"
+               value="${this.formData[column] || ''}"
+               placeholder="Ingrese ${this.formatColumnName(column)}">
+      </div>
+    `).join('');
+    
+    const saveBtn = modal.querySelector('#save-btn');
+    saveBtn.textContent = this.editingItem ? 'Actualizar' : 'Crear';
+  }
+
+  bindEvents() {
+    const searchInput = this.container.querySelector('.giotable-search-input');
+    searchInput.addEventListener('input', (e) => {
+      this.searchTerm = e.target.value;
+      this.filterData();
+      this.renderTable();
+      this.renderPagination();
+    });
+
+    this.container.addEventListener('click', async (e) => {
+      if (e.target.id === 'add-btn') {
+        this.openModal(null);
+      } else if (e.target.id === 'close-modal' || e.target.id === 'cancel-btn') {
+        this.closeModal();
+      } else if (e.target.id === 'save-btn') {
+        const formFields = this.container.querySelectorAll('.form-field');
+        formFields.forEach(field => {
+          this.formData[field.dataset.column] = field.value;
+        });
+        this.saveItem();
+      } else if (e.target.classList.contains('edit-btn')) {
+        const id = parseInt(e.target.dataset.id);
+        const item = this.datos.find(d => d.id === id);
+        this.openModal(item);
+      } else if (e.target.classList.contains('delete-btn')) {
+        const id = parseInt(e.target.dataset.id);
+        const item = this.datos.find(d => d.id === id);
+        this.confirmDelete(item);
+      } else if (e.target.classList.contains('video-btn')) {
+        const id = parseInt(e.target.dataset.id);
+        const item = this.datos.find(d => d.id === id);
+        this.startVideoCall(item);
+      } else if (e.target.classList.contains('giotable-th-sortable') || e.target.dataset.column) {
+        const column = e.target.dataset.column;
+        if (column) {
+          this.sortBy(column);
+          this.renderTable();
+        }
+      } else if (e.target.id === 'first-page') {
+        this.goToPage(1);
+      } else if (e.target.id === 'prev-page') {
+        this.goToPage(this.currentPage - 1);
+      } else if (e.target.id === 'next-page') {
+        this.goToPage(this.currentPage + 1);
+      } else if (e.target.id === 'last-page') {
+        this.goToPage(this.totalPages);
+      } else if (e.target.id === 'export-pdf') {
+        e.target.textContent = 'Generando...';
+        e.target.disabled = true;
+        await this.exportToPDF();
+        e.target.textContent = 'PDF';
+        e.target.disabled = false;
+      } else if (e.target.id === 'export-excel') {
+        e.target.textContent = 'Generando...';
+        e.target.disabled = true;
+        await this.exportToExcel();
+        e.target.textContent = 'Excel';
+        e.target.disabled = false;
+      } else if (e.target.id === 'export-csv') {
+        e.target.textContent = 'Generando...';
+        e.target.disabled = true;
+        await this.exportToCSV();
+        e.target.textContent = 'CSV';
+        e.target.disabled = false;
+      } else if (e.target.id === 'print-table') {
+        this.printTable();
+      } else if (e.target.classList.contains('giotable-modal') && e.target.id === 'modal') {
+        this.closeModal();
+      }
+    });
+
+    this.container.addEventListener('change', (e) => {
+      if (e.target.classList.contains('column-checkbox')) {
+        const column = e.target.value;
+        if (e.target.checked) {
+          this.visibleColumns.push(column);
+        } else {
+          this.visibleColumns = this.visibleColumns.filter(col => col !== column);
+        }
+        this.renderTable();
+      } else if (e.target.id === 'rows-per-page') {
+        this.rowsPerPage = parseInt(e.target.value);
+        this.currentPage = 1;
+        this.renderTable();
+        this.renderPagination();
+      }
+    });
+
+    this.container.addEventListener('mouseenter', (e) => {
+      if (e.target.classList.contains('cell-content')) {
+        this.handleCellInteraction(e, e.target.dataset.content);
+      }
+    }, true);
+
+    this.container.addEventListener('mouseleave', (e) => {
+      if (e.target.classList.contains('cell-content')) {
+        this.hideTooltip();
+      }
+    }, true);
+
+    this.container.addEventListener('touchstart', (e) => {
+      if (e.target.classList.contains('cell-content')) {
+        this.handleCellInteraction(e, e.target.dataset.content);
+      }
+    });
+  }
+}
+
+/* tabla gio */
