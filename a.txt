@@ -1786,7 +1786,7 @@ class GioToggle {
     this.container.addEventListener('mouseenter', (e) => {
       if (e.target.classList.contains('cell-content')) {
         this.handleCellInteraction(e, e.target.dataset.content);
-      }
+      }54
     }, true);
 
     this.container.addEventListener('mouseleave', (e) => {
@@ -1804,3 +1804,106 @@ class GioToggle {
 }
 
 /* tabla gio */
+
+/* cecbxpoy */
+  class GioCheckboxPoly {
+        constructor(parentElement, id, text, events = {}) {
+            this.parentElement = parentElement;
+            this.id = id;
+            this.text = text;
+            this.events = events;
+            this.checked = false;
+            
+            this.createCheckbox();
+            this.attachEvents();
+        }
+
+        createCheckbox() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'gioCheckboxPolygon';
+            wrapper.innerHTML = `
+                <input type="checkbox" id="${this.id}" class="inp-cbx" />
+                <label for="${this.id}" class="cbx">
+                    <span>
+                        <svg viewBox="0 0 12 10" height="10px" width="12px">
+                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                    </span>
+                    <span id="${this.id}span">${this.text}</span>
+                </label>
+            `;
+
+            this.parentElement.appendChild(wrapper);
+            this.checkbox = document.getElementById(this.id);
+            this.textSpan = document.getElementById(this.id + "span");
+        }
+
+        attachEvents() {
+            if (this.events.onChange) {
+                this.checkbox.addEventListener('change', (e) => {
+                    this.checked = e.target.checked;
+                    this.events.onChange(this.checked, e);
+                });
+            }
+
+            if (this.events.onClick) {
+                this.checkbox.addEventListener('click', (e) => {
+                    this.events.onClick(this.checked, e);
+                });
+            }
+
+            if (this.events.onFocus) {
+                this.checkbox.addEventListener('focus', this.events.onFocus);
+            }
+
+            if (this.events.onBlur) {
+                this.checkbox.addEventListener('blur', this.events.onBlur);
+            }
+        }
+
+        setText(newText) {
+            this.text = newText;
+            this.textSpan.textContent = newText;
+        }
+
+        getText() {
+            return this.text;
+        }
+
+        setChecked(checked) {
+            this.checked = checked;
+            this.checkbox.checked = checked;
+        }
+
+        getChecked() {
+            return this.checkbox.checked;
+        }
+
+        getValue() {
+            return this.checkbox.checked;
+        }
+
+        setDisabled(disabled) {
+            this.checkbox.disabled = disabled;
+        }
+
+        isDisabled() {
+            return this.checkbox.disabled;
+        }
+
+        destroy() {
+            if (this.checkbox && this.checkbox.parentElement) {
+                this.checkbox.parentElement.parentElement.remove();
+            }
+        }
+
+        focus() {
+            this.checkbox.focus();
+        }
+
+        blur() {
+            this.checkbox.blur();
+        }
+    }
+
+/*checboxpoly  */
