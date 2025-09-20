@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentador de Clases JS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #e0e0e0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .upload-area {
+            border: 2px dashed #999;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #666;
+            background: #f0f0f0;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #999;
+            border-radius: 6px;
+            font-size: 16px;
+            background: white;
+        }
+
+        .content-area {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: #e8e8e8;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            height: fit-content;
+        }
+
+        .class-list {
+            list-style: none;
+        }
+
+        .class-item {
+            padding: 8px 12px;
+            margin: 2px 0;
+            background: #d5d5d5;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #bbb;
+        }
+
+        .class-item:hover {
+            background: #c5c5c5;
+        }
+
+        .class-item.active {
+            background: #b5b5b5;
+            border-color: #999;
+        }
+
+        .main-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            min-height: 600px;
+        }
+
+        .class-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+
+        .class-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+            color: #555;
+            background: #e5e5e5;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .method-item, .property-item {
+            margin: 10px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .method-name, .property-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .parameters {
+            color: #666;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .example-section {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .code-block {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        input[type="text"] {
+            font-size: 14px;
+        }
+
+        #loadBtn:hover {
+            background: #c0c0c0;
+        }
+
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e8e8e8;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Documentador Automático de Clases JavaScript</h1>
+            <div class="upload-area">
+                <input type="text" id="fileUrl" placeholder="Nombre del archivo .txt (ej: a.txt)" value="a.txt" style="width: 70%; padding: 10px; margin-right: 10px; border: 1px solid #999; border-radius: 4px;">
+                <button id="loadBtn" style="padding: 10px 20px; background: #d0d0d0; border: 1px solid #999; border-radius: 4px; cursor: pointer;">Cargar</button>
+            </div>
+            <div id="status" class="status hidden"></div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchBox" placeholder="Buscar clases, métodos o propiedades..." />
+        </div>
+
+        <div class="content-area">
+            <div class="sidebar">
+                <h3>Clases encontradas</h3>
+                <ul class="class-list" id="classList"></ul>
+            </div>
+
+            <div class="main-content" id="mainContent">
+                <p style="text-align: center; color: #888; margin-top: 100px;">
+                    Ingresa el nombre del archivo .txt que está en la misma carpeta
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ClassAnalyzer {
+            constructor() {
+                this.classes = [];
+                this.currentFilter = '';
+                this.init();
+            }
+
+            init() {
+                document.getElementById('loadBtn').addEventListener('click', () => this.loadFromUrl());
+                document.getElementById('searchBox').addEventListener('input', (e) => this.handleSearch(e));
+                document.getElementById('fileUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.loadFromUrl();
+                });
+            }
+
+            async loadFromUrl() {
+                const fileName = document.getElementById('fileUrl').value.trim();
+                if (!fileName) {
+                    this.showStatus('Ingresa el nombre del archivo.');
+                    return;
+                }
+
+                // Si no tiene extensión, agregar .txt
+                const finalFileName = fileName.endsWith('.txt') ? fileName : fileName + '.txt';
+                
+                this.showStatus('Cargando archivo...');
+
+                try {
+                    const response = await fetch(`./${finalFileName}`);
+                    if (!response.ok) {
+                        throw new Error(`Archivo no encontrado: ${finalFileName}`);
+                    }
+                    
+                    const content = await response.text();
+                    this.analyzeClasses(content);
+                    this.renderResults();
+                    this.showStatus(`Análisis completado. ${this.classes.length} clases encontradas.`);
+                } catch (error) {
+                    this.showStatus(`Error: ${error.message}`);
+                }
+            }
+
+            showStatus(message) {
+                const status = document.getElementById('status');
+                status.className = 'status';
+                status.textContent = message;
+            }
+
+            analyzeClasses(content) {
+                this.classes = [];
+                
+                // Limpiar comentarios primero
+                let cleanContent = content.replace(/\/\*[\s\S]*?\*\//g, '');
+                
+                // Buscar clases con regex mejorado
+                const classRegex = /class\s+(\w+)\s*\{([\s\S]*?)(?=\n\s*class\s+|\n\s*\/\*|\n\s*$|$)/g;
+                let match;
+
+                while ((match = classRegex.exec(cleanContent)) !== null) {
+                    const className = match[1];
+                    let classBody = match[2];
+                    
+                    // Encontrar el final correcto de la clase
+                    let braceCount = 0;
+                    let endIndex = 0;
+                    
+                    for (let i = 0; i < classBody.length; i++) {
+                        if (classBody[i] === '{') {
+                            braceCount++;
+                        } else if (classBody[i] === '}') {
+                            braceCount--;
+                            if (braceCount === -1) {
+                                endIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    classBody = classBody.substring(0, endIndex);
+                    
+                    const classInfo = {
+                        name: className,
+                        constructor: this.extractConstructor(classBody),
+                        methods: this.extractMethods(classBody),
+                        properties: this.extractProperties(classBody),
+                        fullCode: `class ${className} {${classBody}}`
+                    };
+
+                    this.classes.push(classInfo);
+                }
+
+                // Ordenar alfabéticamente
+                this.classes.sort((a, b) => a.name.localeCompare(b.name));
+            }
+
+            extractConstructor(classBody) {
+                const constructorRegex = /constructor\s*\(([^)]*)\)\s*{([^{}]*(?:{[^{}]*}[^{}]*)*)}/s;
+                const match = constructorRegex.exec(classBody);
+                
+                if (!match) return null;
+
+                const params = this.parseParameters(match[1]);
+                const body = match[2].trim();
+
+                return {
+                    parameters: params,
+                    body: body
+                };
+            }
+
+            extractMethods(classBody) {
+                const methods = [];
+                // Regex mejorado para métodos
+                const methodRegex = /^\s*(\w+)\s*\([^)]*\)\s*[{=]/gm;
+                let match;
+
+                while ((match = methodRegex.exec(classBody)) !== null) {
+                    const methodName = match[1];
+                    if (methodName !== 'constructor' && methodName !== 'if' && methodName !== 'for' && methodName !== 'while') {
+                        // Extraer parámetros del método
+                        const fullMatch = match[0];
+                        const paramMatch = fullMatch.match(/\(([^)]*)\)/);
+                        const params = paramMatch ? this.parseParameters(paramMatch[1]) : [];
+                        
+                        methods.push({
+                            name: methodName,
+                            parameters: params
+                        });
+                    }
+                }
+
+                return methods;
+            }
+
+            extractProperties(classBody) {
+                const properties = [];
+                const propertyRegex = /this\.(\w+)\s*=/g;
+                let match;
+                const found = new Set();
+
+                while ((match = propertyRegex.exec(classBody)) !== null) {
+                    const propName = match[1];
+                    if (!found.has(propName)) {
+                        properties.push({ name: propName });
+                        found.add(propName);
+                    }
+                }
+
+                return properties;
+            }
+
+            parseParameters(paramString) {
+                if (!paramString.trim()) return [];
+                
+                return paramString.split(',').map(param => {
+                    const parts = param.trim().split('=');
+                    const name = parts[0].trim();
+                    const defaultValue = parts[1] ? parts[1].trim() : null;
+                    
+                    return {
+                        name: name,
+                        defaultValue: defaultValue
+                    };
+                });
+            }
+
+            renderResults() {
+                this.renderSidebar();
+                this.renderMainContent();
+            }
+
+            renderSidebar() {
+                const classList = document.getElementById('classList');
+                classList.innerHTML = '';
+
+                this.getFilteredClasses().forEach((classInfo, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'class-item';
+                    li.textContent = classInfo.name;
+                    li.onclick = () => this.selectClass(index);
+                    if (index === 0) li.className += ' active';
+                    classList.appendChild(li);
+                });
+            }
+
+            renderMainContent() {
+                const mainContent = document.getElementById('mainContent');
+                const filteredClasses = this.getFilteredClasses();
+                
+                if (filteredClasses.length === 0) {
+                    mainContent.innerHTML = '<p style="text-align: center; color: #888; margin-top: 100px;">No se encontraron clases que coincidan con la búsqueda.</p>';
+                    return;
+                }
+
+                let html = '';
+                filteredClasses.forEach(classInfo => {
+                    html += this.renderClassSection(classInfo);
+                });
+
+                mainContent.innerHTML = html;
+            }
+
+            renderClassSection(classInfo) {
+                let html = `
+                    <div class="class-section">
+                        <h2 class="class-title">${classInfo.name}</h2>
+                `;
+
+                // Constructor
+                if (classInfo.constructor) {
+                    html += `
+                        <div class="section-title">Constructor</div>
+                        <div class="method-item">
+                            <div class="method-name">constructor</div>
+                            <div class="parameters">
+                                Parámetros: ${this.formatParameters(classInfo.constructor.parameters)}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Propiedades
+                if (classInfo.properties.length > 0) {
+                    html += `<div class="section-title">Propiedades</div>`;
+                    classInfo.properties.forEach(prop => {
+                        html += `
+                            <div class="property-item">
+                                <div class="property-name">${prop.name}</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Métodos
+                if (classInfo.methods.length > 0) {
+                    html += `<div class="section-title">Métodos</div>`;
+                    classInfo.methods.forEach(method => {
+                        html += `
+                            <div class="method-item">
+                                <div class="method-name">${method.name}</div>
+                                <div class="parameters">
+                                    Parámetros: ${this.formatParameters(method.parameters)}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Ejemplo de uso
+                html += `
+                    <div class="example-section">
+                        <div class="section-title">Ejemplo de uso</div>
+                        <div class="code-block">${this.generateUsageExample(classInfo)}</div>
+                    </div>
+                `;
+
+                html += `</div>`;
+                return html;
+            }
+
+            formatParameters(params) {
+                if (!params || params.length === 0) return 'ninguno';
+                
+                return params.map(param => {
+                    let result = param.name;
+                    if (param.defaultValue) {
+                        result += ` = ${param.defaultValue}`;
+                    }
+                    return result;
+                }).join(', ');
+            }
+
+            generateUsageExample(classInfo) {
+                let example = `// Ejemplo de uso de la clase ${classInfo.name}\n\n`;
+                
+                if (classInfo.constructor) {
+                    const params = classInfo.constructor.parameters;
+                    let paramValues = [];
+                    
+                    params.forEach(param => {
+                        if (param.name.includes('Element')) {
+                            paramValues.push('document.getElementById("container")');
+                        } else if (param.name.includes('id') || param.name.includes('Id')) {
+                            paramValues.push('"mi-elemento"');
+                        } else if (param.name.includes('text') || param.name.includes('Text')) {
+                            paramValues.push('"Texto de ejemplo"');
+                        } else if (param.name.includes('events')) {
+                            paramValues.push('{ click: () => console.log("clicked") }');
+                        } else if (param.defaultValue) {
+                            paramValues.push(param.defaultValue);
+                        } else {
+                            paramValues.push('"valor"');
+                        }
+                    });
+
+                    example += `const mi${classInfo.name} = new ${classInfo.name}(${paramValues.join(', ')});\n\n`;
+                } else {
+                    example += `const mi${classInfo.name} = new ${classInfo.name}();\n\n`;
+                }
+
+                // Agregar ejemplos de métodos
+                classInfo.methods.slice(0, 3).forEach(method => {
+                    if (method.name !== 'init' && method.name !== 'createElement') {
+                        example += `mi${classInfo.name}.${method.name}();\n`;
+                    }
+                });
+
+                return example;
+            }
+
+            selectClass(index) {
+                const items = document.querySelectorAll('.class-item');
+                items.forEach(item => item.classList.remove('active'));
+                items[index].classList.add('active');
+
+                const classInfo = this.getFilteredClasses()[index];
+                const mainContent = document.getElementById('mainContent');
+                mainContent.innerHTML = this.renderClassSection(classInfo);
+            }
+
+            handleSearch(event) {
+                this.currentFilter = event.target.value.toLowerCase();
+                this.renderResults();
+            }
+
+            getFilteredClasses() {
+                if (!this.currentFilter) return this.classes;
+                
+                return this.classes.filter(classInfo => {
+                    return classInfo.name.toLowerCase().includes(this.currentFilter) ||
+                           classInfo.methods.some(method => method.name.toLowerCase().includes(this.currentFilter)) ||
+                           classInfo.properties.some(prop => prop.name.toLowerCase().includes(this.currentFilter));
+                });
+            }
+        }
+
+        // Inicializar la aplicación
+        new ClassAnalyzer();
+    </script>
+</body>
+</html>
